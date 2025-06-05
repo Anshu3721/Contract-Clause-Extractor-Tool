@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contract Clause Extractor Tool • Results</title>
+
+  <!-- Google Font: Poppins -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-6gIdnW3IH6oN31o+Ynik+LeKjgr3T5oYfPC7s6+Yyc6OFV6wO5pTzvCV9XK9yE6F"
+    crossorigin="anonymous"
+  />
+
+  <style>
+    /* ========== VARIABLES & COLORS ========== */
+    :root {
+      --primary-color: #009688;       /* Teal */
+      --secondary-color: #ff5722;     /* Coral */
+      --accent-color: #3f51b5;        /* Indigo for CSV button */
+      --bg-color: #f0f2f5;            /* Light gray */
+      --card-bg: #ffffff;             /* White */
+      --text-color: #333333;          /* Dark gray */
+      --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --heading-font-size: 2.5rem;
+      --subheading-font-size: 1.25rem;
+    }
+
+    /* ========== GLOBAL STYLES ========== */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ========== HEADER ========== */
+    .header-container {
+      background: var(--primary-color);
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+    }
+    .header-container h1 {
+      font-size: var(--heading-font-size);
+      font-weight: 600;
+      margin: 0;
+    }
+    .header-container p.motto {
+      margin: 0.5rem 0 0;
+      font-size: var(--subheading-font-size);
+      font-weight: 400;
+      font-style: italic;
+      opacity: 0.9;
+    }
+    .action-buttons {
+      margin-top: 1.5rem;
+    }
+    .action-buttons .btn {
+      margin: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.7rem 1.2rem;
+      border-radius: 0.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
+      color: #fff;
+    }
+    .btn-download-txt {
+      background: var(--secondary-color);
+    }
+    .btn-download-txt:hover {
+      background: #e64a19;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    .btn-download-csv {
+      background: var(--accent-color);
+    }
+    .btn-download-csv:hover {
+      background: #303f9f;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    .btn-upload-another {
+      background: var(--primary-color);
+    }
+    .btn-upload-another:hover {
+      background: #00796b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+
+    /* ========== MAIN CONTENT ========== */
+    .results-container {
+      flex: 1;
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ========== CLAUSE CARDS GRID ========== */
+    .clauses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .clause-card {
+      background: var(--card-bg);
+      border: none;
+      border-radius: 0.75rem;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .clause-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+    .clause-header {
+      background: var(--secondary-color);
+      padding: 1rem 1.25rem;
+      border-radius: 0.75rem 0.75rem 0 0;
+      cursor: default;
+      user-select: none;
+    }
+    .clause-header h5 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .clause-header h5 .badge {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-size: 0.85rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+    }
+    .clause-body {
+      padding: 1rem 1.25rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      overflow-y: auto;
+      flex: 1; /* make body expand */
+    }
+    .clause-body pre {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    /* ========== NO CLAUSES ALERT ========== */
+    .no-clauses-alert {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: #ffeaa7;
+      color: var(--text-color);
+      border-radius: 0.5rem;
+      padding: 1rem 1.5rem;
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    /* ========== CHAT WIDGET ========== */
+    #ai-chat-box {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      max-width: 90%;
+      background: var(--card-bg);
+      border-radius: 0.75rem;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+    }
+    #ai-chat-box .chat-header {
+      background: var(--primary-color);
+      color: #fff;
+      padding: 0.75rem 1rem;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #ai-chat-box .chat-header span {
+      font-size: 1rem;
+    }
+    #ai-chat-box .chat-header button.close-chat {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+    #ai-chat-box .chat-body {
+      padding: 0.75rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    #ai-chat-box input#ai-question {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.95rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      outline: none;
+    }
+    #ai-chat-box input#ai-question:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(0, 150, 136, 0.2);
+    }
+    #ai-chat-box button#ask-ai-btn {
+      background: var(--secondary-color);
+      border: none;
+      color: #fff;
+      font-weight: 500;
+      padding: 0.6rem;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    #ai-chat-box button#ask-ai-btn:hover {
+      background: #e64a19;
+      transform: translateY(-1px);
+    }
+    #ai-chat-box #ai-response {
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--text-color);
+      max-height: 150px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      background: #f9f9f9;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #eee;
+    }
+
+    /* ========== SCROLL-TO-TOP BUTTON ========== */
+    #scroll-top-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 3rem;
+      height: 3rem;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      box-shadow: var(--shadow-soft);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      z-index: 1000;
+    }
+    #scroll-top-btn:hover {
+      background: #00796b;
+      transform: translateY(-3px);
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: var(--card-bg);
+      box-shadow: var(--shadow-soft);
+      font-size: 0.9rem;
+      color: #555;
+    }
+    footer a {
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 576px) {
+      .header-container h1 {
+        font-size: 2rem;
+      }
+      .header-container p.motto {
+        font-size: 1rem;
+      }
+      .action-buttons .btn {
+        font-size: 0.9rem;
+        padding: 0.6rem 1rem;
+        margin: 0.3rem;
+      }
+      .clause-header h5 {
+        font-size: 1.1rem;
+      }
+      .clause-body {
+        font-size: 0.9rem;
+      }
+      #ai-chat-box {
+        width: 90%;
+        right: 5%;
+        bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <section class="header-container">
+    <h1>Contract Clause Extractor Tool</h1>
+    <p class="motto">Unearth your contract’s secrets in a flash!</p>
+    <div class="action-buttons">
+      <a href="{{ url_for('download_txt', filename=filename) }}" class="btn btn-download-txt">
+        Download TXT
+      </a>
+      <a href="{{ url_for('download_csv', filename=filename) }}" class="btn btn-download-csv">
+        Download CSV
+      </a>
+      <a href="{{ url_for('upload_file') }}" class="btn btn-upload-another">
+        Upload Another File
+      </a>
+    </div>
+  </section>
+
+  <!-- Main Results Section -->
+  <div class="results-container">
+    {% if clauses %}
+      <div class="clauses-grid">
+        {% for title, text in clauses.items() %}
+          <div class="card clause-card">
+            <div class="clause-header">
+              <h5>
+                {{ title }}
+                <span class="badge bg-light text-dark">{{ loop.index }}</span>
+              </h5>
+            </div>
+            <div class="clause-body">
+              <pre>{{ text }}</pre>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="no-clauses-alert">
+        No clauses found. Either the headings didn’t match our list, or this contract has none of the expected sections.
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Floating AI Chat Widget -->
+  <div id="ai-chat-box">
+    <div class="chat-header">
+      <span>Need Help?</span>
+      <button class="close-chat" onclick="document.getElementById('ai-chat-box').style.display='none';">×</button>
+    </div>
+    <div class="chat-body">
+      <input type="text" id="ai-question" placeholder="Ask about a clause..." />
+      <button id="ask-ai-btn" onclick="askAI()">Ask AI</button>
+      <div id="ai-response"></div>
+    </div>
+  </div>
+
+  <!-- Scroll-to-Top Button -->
+  <button id="scroll-top-btn" title="Scroll to top">▲</button>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Contract Clause Extractor Tool • Crafted with ♥ by YourName
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mjtRsaQJ3jUSq6UPpZcOWQ+7+LCWuJ2hyA2n+6R3tv+K0X"
+    crossorigin="anonymous"
+  ></script>
+
+  <script>
+    // Scroll-to-top functionality
+    const scrollBtn = document.getElementById("scroll-top-btn");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        scrollBtn.style.display = "flex";
+      } else {
+        scrollBtn.style.display = "none";
+      }
+    });
+    scrollBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // AI Chat: Send question to /ask_ai and display response
+    function askAI() {
+      const questionInput = document.getElementById("ai-question");
+      const responseDiv = document.getElementById("ai-response");
+      const question = questionInput.value.trim();
+      if (!question) {
+        responseDiv.innerText = "Please type a question.";
+        return;
+      }
+      responseDiv.innerText = "Thinking...";
+      fetch("/ask_ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: question })
+      })
+        .then(res => res.json())
+        .then(data => {
+          responseDiv.innerText = data.reply || "No response.";
+        })
+        .catch(() => {
+          responseDiv.innerText = "Error getting answer.";
+        });
+      questionInput.value = "";
+    }
+  </script>
+</body>
+</html>
