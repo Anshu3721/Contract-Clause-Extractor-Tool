@@ -42,7 +42,7 @@ This project uses **Google Gemini Pro API** via [AI Studio](https://makersuite.g
 4. Copy the generated key (looks like `AIzaSyD...`)
 5. In `app.py`, paste it here:
 
-python
+## Python
 ```GEMINI_API_KEY = "your_real_api_key_here"```
 
 
