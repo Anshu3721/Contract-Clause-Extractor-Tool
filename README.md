@@ -3,6 +3,8 @@
 ## Demo
 <img src="https://github.com/Anshu3721/Contract-Clause-Extractor-Tool/blob/master/demo_video.gif">
 
+### To watch full demo video, please click here- https://lnkd.in/g9rsXGn9
+
 
 An NLP-powered web app to automatically extract key legal clauses from contracts (`.pdf` or `.txt`) and explain them using **Gemini AI**. Built with **Flask, spaCy, PyMuPDF**, and a beautiful responsive UI.
 
