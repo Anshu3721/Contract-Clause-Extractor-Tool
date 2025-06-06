@@ -1,5 +1,9 @@
 # 📄 Contract Clause Extraction Tool (with Gemini AI Assistant)
 
+## Demo
+<img src="[https://github.com/Anshu3721/Banglore_house_price_prediction/blob/master/demo_gif.gif](https://github.com/Anshu3721/Contract-Clause-Extractor-Tool/blob/master/demo_video.gif)">
+
+
 
 An NLP-powered web app to automatically extract key legal clauses from contracts (`.pdf` or `.txt`) and explain them using **Gemini AI**. Built with **Flask, spaCy, PyMuPDF**, and a beautiful responsive UI.
 
