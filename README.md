@@ -1,5 +1,9 @@
 # 📄 Contract Clause Extraction Tool (with Gemini AI Assistant)
 
+## Demo Video
+![Alt Text](C:\Users\anshkuma\Downloads\Untitled video - Made with Clipchamp.mp4.gif)
+
+
 An NLP-powered web app to automatically extract key legal clauses from contracts (`.pdf` or `.txt`) and explain them using **Gemini AI**. Built with **Flask, spaCy, PyMuPDF**, and a beautiful responsive UI.
 
 ---
